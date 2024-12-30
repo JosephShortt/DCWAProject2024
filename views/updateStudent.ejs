@@ -1,6 +1,21 @@
 <h1>Update Student</h1>
 
+<!-- Display errors if there are any -->
+<% if (errors && errors.length > 0) { %>
+    <ul>
+        <% errors.forEach(function(error) { %>
+            <li><%= error %></li>
+        <% }) %>
+    </ul>
+<% } %>
+
+
 <form action="/students/update/<%= student.sid %>" method="POST">
+    <div>
+        <label for="sid">Student ID:</label>
+        <input type="text" id="sid" name="sid" value="<%= student.sid %>" readonly>
+    </div>
+
     <div>
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" value="<%= student.name %>" required>
