@@ -28,7 +28,7 @@ app.get("/students", (req, res) => {
     });
 });
 
-//
+//get request to get the student by id
 app.get("/students/edit/:id", (req, res) => {
   const studentId = req.params.id;
 
@@ -98,7 +98,7 @@ app.get("/students/add", (req, res) => {
 });
 
 //post method for adding a student
-app.post("/students/add", (req, res) => {
+app.post("/students/add", async (req, res) => {
   const { sid, name, age } = req.body;
   
   // Validation
@@ -116,24 +116,32 @@ app.post("/students/add", (req, res) => {
       errors.push("Age should be a valid number greater than 18");
   }
   
-  if (errors.length > 0) {
-      return res.render("addStudent", {
-          student: { sid, name, age },
-          errors: errors
-      });
-  }
-  
-  mysqlDAO.addStudent(sid, name, parseInt(age))
-      .then(() => {
-          res.redirect("/students");
-      })
-      .catch((error) => {
-          // Handle specific database errors
-          let errorMsg = "Database error occurred";
-          
-          res.render("addStudent", {
-              student: { sid, name, age },
-              errors: [errorMsg]
-          });
-      });
+  try {
+    // Check if student ID exists (only if sid is valid)
+    if (sid && sid.length === 4) {
+        const exists = await mysqlDAO.checkStudentExists(sid);
+        if (exists) {
+            errors.push("Student ID already exists");
+        }
+    }
+
+    // If there are any errors, show them all at once
+    if (errors.length > 0) {
+        return res.render("addStudent", {
+            student: { sid, name, age },
+            errors: errors
+        });
+    }
+
+    // If no errors, proceed with adding the student
+    await mysqlDAO.addStudent(sid, name, parseInt(age));
+    res.redirect("/students");
+
+} catch (error) {
+    // Handle any database errors
+    res.render("addStudent", {
+        student: { sid, name, age },
+        errors: ["Database error occurred"]
+    });
+}
 });

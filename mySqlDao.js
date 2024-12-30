@@ -49,6 +49,24 @@ var updateStudent = function(studentId, name, age) {
   });
 };
 
+// In mySqlDao.js
+var checkStudentExists = function(sid) {
+  return new Promise((resolve, reject) => {
+      const query = 'SELECT COUNT(*) as count FROM student WHERE sid = ?';
+      const values = [sid];
+      
+      pool.query(query, values)
+          .then((data) => {
+              // data[0].count will be 0 if student doesn't exist, 1 if exists
+              resolve(data[0].count > 0);
+          })
+          .catch((error) => {
+              console.log('Error checking student:', error);
+              reject(error);
+          });
+  });
+};
+
 var addStudent = function(studentId, name, age){
   return new Promise((resolve,reject)=>{
     const query = 'INSERT INTO student (sid, name, age) VALUES (?, ?, ?)';
@@ -68,4 +86,4 @@ var addStudent = function(studentId, name, age){
 
 
 
-module.exports = { getStudents,updateStudent,addStudent } 
+module.exports = { getStudents,updateStudent,addStudent, checkStudentExists} 
