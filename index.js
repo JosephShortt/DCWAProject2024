@@ -91,3 +91,49 @@ if (name && name.length <= 1) {
       });
   }
 });
+
+// GET route to show the form for adding a student
+app.get("/students/add", (req, res) => {
+  res.render("addStudent", { errors: [], student: null });
+});
+
+//post method for adding a student
+app.post("/students/add", (req, res) => {
+  const { sid, name, age } = req.body;
+  
+  // Validation
+  const errors = [];
+  
+  if (!sid || !name || !age) {
+      errors.push("All fields are required");
+  }
+  
+  if (name && name.length <= 1) {
+      errors.push("Name should be more than 1 character");
+  }
+  
+  if (age && (isNaN(age) || parseInt(age) < 18)) {
+      errors.push("Age should be a valid number greater than 18");
+  }
+  
+  if (errors.length > 0) {
+      return res.render("addStudent", {
+          student: { sid, name, age },
+          errors: errors
+      });
+  }
+  
+  mysqlDAO.addStudent(sid, name, parseInt(age))
+      .then(() => {
+          res.redirect("/students");
+      })
+      .catch((error) => {
+          // Handle specific database errors
+          let errorMsg = "Database error occurred";
+          
+          res.render("addStudent", {
+              student: { sid, name, age },
+              errors: [errorMsg]
+          });
+      });
+});

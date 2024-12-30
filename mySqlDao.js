@@ -18,12 +18,6 @@ pmysql
   });
 
 
-  var getHome = function(){
-    return new promis((resolve,reject) => {
-        pool.query()
-    })
-  }
-
   var getStudents = function() {
     return new Promise((resolve, reject) => {
         pool.query('SELECT * FROM student')
@@ -55,6 +49,23 @@ var updateStudent = function(studentId, name, age) {
   });
 };
 
+var addStudent = function(studentId, name, age){
+  return new Promise((resolve,reject)=>{
+    const query = 'INSERT INTO student (sid, name, age) VALUES (?, ?, ?)';
+    const values = [studentId, name, age];
+
+    pool.query(query, values)
+    .then((data) => {
+        console.log('Student added:', data);
+        resolve(data);
+    })
+    .catch((error) => {
+        console.log(error);
+        reject(error);
+    });
+  })
+}
 
 
-module.exports = { getStudents,updateStudent } 
+
+module.exports = { getStudents,updateStudent,addStudent } 
