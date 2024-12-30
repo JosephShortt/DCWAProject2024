@@ -38,19 +38,23 @@ pmysql
     })
 }
 
-var deleteStudent = function(){
-    return new Promise((remove, reject) => {
-        pool.query('DELETE FROM student WHERE sid=')
-        .then((data) => {
-            console.log(data)
-            remove(data)
-        })
-        .catch((error) => {
-            console.log(error)
-            reject(error)
-        })
-    })
-}
+var updateStudent = function(studentId, name, age) {
+  return new Promise((resolve, reject) => {
+      const query = 'UPDATE student SET name = ?, age = ? WHERE sid = ?';
+      const values = [name, age, studentId];
+
+      pool.query(query, values)
+          .then((data) => {
+              console.log('Student updated:', data);
+              resolve(data);
+          })
+          .catch((error) => {
+              console.log(error);
+              reject(error);
+          });
+  });
+};
 
 
-module.exports = { getStudents,deleteStudent } 
+
+module.exports = { getStudents,updateStudent } 

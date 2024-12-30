@@ -1,22 +1,47 @@
 <style>
   .container {
     display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Creates 4 equal columns */
+    gap: 5px; /* Adds space between the grid items */
+    width: 30%;
+  }
+
+  .header,
+  .row {
+    display: contents; /* Allows the items inside to fill the grid */
+  }
+
+  .header div,
+  .row div {
+    padding: 2px;
+    border: 1px solid black; /* Adds a border around each item */
   }
 </style>
 
+<h1>Students</h1>
+<div>
+  <div><a href="">Add Student</a></div>
+  <div><a href="/">Home</a></div>
+</div>
+
+
+
 <div class="container">
-  <div>
-    <div>ID</div>
+  <!-- Header Row -->
+  <div class="header">
+    <div>Student ID</div>
     <div>Name</div>
     <div>Age</div>
     <div>Action</div>
   </div>
+
+  <!-- Student Data Rows -->
   <% studentsList.forEach((student) => { %>
-  <div>
-    <td><%= student.sid %></td>
-    <td><%= student.name %></td>
-    <td><%= student.age %></td>
-    <td><a href="/students/delete/<%= student.sid %>">Delete</a></td>
+  <div class="row">
+    <div><%= student.sid %></div>
+    <div><%= student.name %></div>
+    <div><%= student.age %></div>
+    <div><a href="/students/edit/<%= student.sid %>">Update</a></div>
   </div>
   <% }) %>
 </div>
