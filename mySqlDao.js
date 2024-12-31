@@ -74,7 +74,6 @@ var updateStudent = function (studentId, name, age) {
   });
 };
 
-// In mySqlDao.js
 var checkStudentExists = function (sid) {
   return new Promise((resolve, reject) => {
     const query = "SELECT COUNT(*) as count FROM student WHERE sid = ?";
@@ -90,6 +89,19 @@ var checkStudentExists = function (sid) {
         console.log("Error checking student:", error);
         reject(error);
       });
+  });
+};
+
+
+var getModules = function() {
+  return new Promise((resolve, reject) => {
+      pool.query("SELECT * FROM module")
+          .then((data) => {
+              resolve(data);
+          })
+          .catch((error) => {
+              reject(error);
+          });
   });
 };
 
@@ -111,4 +123,6 @@ var addStudent = function (studentId, name, age) {
   });
 };
 
-module.exports = { getStudents, updateStudent, addStudent, checkStudentExists,getGrades };
+
+
+module.exports = { getStudents, updateStudent, addStudent, checkStudentExists, getGrades, getModules};

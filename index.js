@@ -1,5 +1,7 @@
 var express = require("express");
 var mysqlDAO = require("./mySqlDao");
+const mongoDAO = require('./mongoDao');
+
 let ejs = require("ejs");
 
 var app = express();
@@ -147,7 +149,7 @@ app.post("/students/add", async (req, res) => {
 });
 
 
-// In index.js
+
 app.get("/grades", (req, res) => {
   mysqlDAO
       .getGrades()
@@ -156,5 +158,27 @@ app.get("/grades", (req, res) => {
       })
       .catch((error) => {
           res.send(error);
+      });
+});
+
+app.get("/lecturers", (req, res) => {
+  mongoDAO.getLecturers()
+      .then((data) => {
+          res.render("lecturers", { lecturersList: data });
+      })
+      .catch((error) => {
+          res.send(error);
+      });
+});
+
+app.get("/lecturers/delete/:id", (req, res) => {
+  const lecturerId = req.params.id;
+  
+  mongoDAO.deleteLecturer(lecturerId)
+      .then(() => {
+          res.redirect("/lecturers");
+      })
+      .catch(error => {
+          res.render("error", { message: error });
       });
 });

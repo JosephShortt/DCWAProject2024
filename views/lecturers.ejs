@@ -1,0 +1,31 @@
+<h1>Lecturers</h1>
+<a href="/">Home</a>
+
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+    }
+</style>
+
+<table>
+    <tr>
+        <th>Lecturer ID</th>
+        <th>Name</th>
+        <th>Department ID</th>
+        <th>Action</th>
+    </tr>
+    <% lecturersList.forEach((lecturer) => { %>
+        <tr>
+            <td><%= lecturer._id %></td>
+            <td><%= lecturer.name %></td>
+            <td><%= lecturer.did %></td>
+            <td><a href="/lecturers/delete/<%= lecturer._id %>">Delete</a></td>
+        </tr>
+    <% }) %>
+</table>
