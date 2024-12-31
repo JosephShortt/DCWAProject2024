@@ -145,3 +145,16 @@ app.post("/students/add", async (req, res) => {
     });
 }
 });
+
+
+// In index.js
+app.get("/grades", (req, res) => {
+  mysqlDAO
+      .getGrades()
+      .then((data) => {
+          res.render("grades", { gradesList: data });
+      })
+      .catch((error) => {
+          res.send(error);
+      });
+});

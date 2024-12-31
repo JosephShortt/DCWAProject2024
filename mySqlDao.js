@@ -17,73 +17,98 @@ pmysql
     console.log("pool error:" + e);
   });
 
-
-  var getStudents = function() {
-    return new Promise((resolve, reject) => {
-        pool.query('SELECT * FROM student')
-        .then((data) => {
-            console.log(data)
-            resolve(data)
-        })
-        .catch((error) => {
-            console.log(error)
-            reject(error)
-        })
-    })
-}
-
-var updateStudent = function(studentId, name, age) {
+var getStudents = function () {
   return new Promise((resolve, reject) => {
-      const query = 'UPDATE student SET name = ?, age = ? WHERE sid = ?';
-      const values = [name, age, studentId];
+    pool
+      .query("SELECT * FROM student")
+      .then((data) => {
+        console.log(data);
+        resolve(data);
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};
 
-      pool.query(query, values)
+var getGrades = function () {
+  return new Promise((resolve, reject) => {
+      const query = `
+          SELECT 
+              s.name as student_name,
+              m.name as module_name,
+              g.grade
+          FROM student s
+          LEFT JOIN grade g ON s.sid = g.sid
+          LEFT JOIN module m ON g.mid = m.mid
+          ORDER BY s.name, g.grade`;
+
+      pool.query(query)
           .then((data) => {
-              console.log('Student updated:', data);
+              console.log("Grades data:", data);
               resolve(data);
           })
           .catch((error) => {
-              console.log(error);
+              console.log("Error getting grades:", error);
               reject(error);
           });
+  });
+};
+
+var updateStudent = function (studentId, name, age) {
+  return new Promise((resolve, reject) => {
+    const query = "UPDATE student SET name = ?, age = ? WHERE sid = ?";
+    const values = [name, age, studentId];
+
+    pool
+      .query(query, values)
+      .then((data) => {
+        console.log("Student updated:", data);
+        resolve(data);
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
   });
 };
 
 // In mySqlDao.js
-var checkStudentExists = function(sid) {
+var checkStudentExists = function (sid) {
   return new Promise((resolve, reject) => {
-      const query = 'SELECT COUNT(*) as count FROM student WHERE sid = ?';
-      const values = [sid];
-      
-      pool.query(query, values)
-          .then((data) => {
-              // data[0].count will be 0 if student doesn't exist, 1 if exists
-              resolve(data[0].count > 0);
-          })
-          .catch((error) => {
-              console.log('Error checking student:', error);
-              reject(error);
-          });
+    const query = "SELECT COUNT(*) as count FROM student WHERE sid = ?";
+    const values = [sid];
+
+    pool
+      .query(query, values)
+      .then((data) => {
+        // data[0].count will be 0 if student doesn't exist, 1 if exists
+        resolve(data[0].count > 0);
+      })
+      .catch((error) => {
+        console.log("Error checking student:", error);
+        reject(error);
+      });
   });
 };
 
-var addStudent = function(studentId, name, age){
-  return new Promise((resolve,reject)=>{
-    const query = 'INSERT INTO student (sid, name, age) VALUES (?, ?, ?)';
+var addStudent = function (studentId, name, age) {
+  return new Promise((resolve, reject) => {
+    const query = "INSERT INTO student (sid, name, age) VALUES (?, ?, ?)";
     const values = [studentId, name, age];
 
-    pool.query(query, values)
-    .then((data) => {
-        console.log('Student added:', data);
+    pool
+      .query(query, values)
+      .then((data) => {
+        console.log("Student added:", data);
         resolve(data);
-    })
-    .catch((error) => {
+      })
+      .catch((error) => {
         console.log(error);
         reject(error);
-    });
-  })
-}
+      });
+  });
+};
 
-
-
-module.exports = { getStudents,updateStudent,addStudent, checkStudentExists} 
+module.exports = { getStudents, updateStudent, addStudent, checkStudentExists,getGrades };
