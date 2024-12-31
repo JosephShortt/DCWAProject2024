@@ -1,15 +1,16 @@
+<!--Displays a list of all lecturers from the mongo database-->
 <h1>Lecturers</h1>
 <a href="/">Home</a>
-
+<!--Style for the table-->
 <style>
     table {
         border-collapse: collapse;
-        width: 100%;
+        width: 50%;
     }
     th, td {
         border: 1px solid black;
         padding: 8px;
-        text-align: left;
+        text-align: center;
     }
 </style>
 
@@ -20,11 +21,13 @@
         <th>Department ID</th>
         <th>Action</th>
     </tr>
+    <!--Lists through lecturers and displays them in rows and columns-->
     <% lecturersList.forEach((lecturer) => { %>
         <tr>
             <td><%= lecturer._id %></td>
             <td><%= lecturer.name %></td>
             <td><%= lecturer.did %></td>
+            <!--Link to delete a lecturer given the id-->
             <td><a href="/lecturers/delete/<%= lecturer._id %>">Delete</a></td>
         </tr>
     <% }) %>

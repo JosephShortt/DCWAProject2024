@@ -1,3 +1,4 @@
+<!--CSS Styling for the table-->
 <style>
     table {
         border-collapse: collapse;
@@ -16,11 +17,12 @@
         background-color: #f2f2f2;
     }
 </style>
-
+<!--Heading and link to home page-->
 <h1>Grades</h1>
 <a href="/">Home</a>
 
 <table>
+    <!--Header items - Student, module, grade-->
     <thead>
         <tr>
             <th>Student</th>
@@ -32,6 +34,7 @@
         <% 
         let currentStudent = '';
         gradesList.forEach((row) => {
+            <!--If student doesnt have module or grade print name with empty module and grade-->
             if (row.student_name !== currentStudent) {
                 currentStudent = row.student_name;
                 if (!row.module_name) {
@@ -42,6 +45,7 @@
                         <td></td>
                     </tr>
                     <%
+                    <!--Otherwise display all details-->
                 } else {
                     %>
                     <tr>

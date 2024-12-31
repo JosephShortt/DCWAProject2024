@@ -13,10 +13,11 @@
         </ul>
     </div>
 <% } %>
-
+<!--Form for adding a student-->
 <form action="/students/add" method="POST">
     <div>
         <label for="sid">Student ID:</label>
+        <!--id only accepts 4 character-->
         <input 
             type="text" 
             id="sid" 
@@ -51,6 +52,7 @@
     </div>
     
     <div>
+        <!--When submitted, sends post request to /students/add-->
         <button type="submit">Add Student</button>
         <a href="/students">Cancel</a>
     </div>

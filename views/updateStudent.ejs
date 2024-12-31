@@ -12,7 +12,8 @@
     </ul>
 <% } %>
 
-
+<!--Form for updating a student, displays initial student details in input box's-->
+<!--Sid is readonly(non-editable)-->
 <form action="/students/update/<%= student.sid %>" method="POST">
     <div>
         <label for="sid">Student ID:</label>
@@ -33,5 +34,5 @@
         <button type="submit">Update</button>
     </div>
 </form>
-
+<!--Link to go back to students-->
 <a href="/students">Back to Students</a>

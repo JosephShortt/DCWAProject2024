@@ -1,9 +1,10 @@
+
 <style>
   .container {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* Creates 4 equal columns */
     gap: 5px; /* Adds space between the grid items */
-    width: 30%;
+    width: 50%;
   }
 
   .header,
@@ -18,14 +19,16 @@
   }
 </style>
 
+<!--Displays the students grid, populated with students from the mysql database-->
 <h1>Students</h1>
 <div>
+  <!--Link to add student/home-->
   <div><a href="/students/add">Add Student</a></div>
   <div><a href="/">Home</a></div>
 </div>
 
 
-
+<!--Grid for students-->
 <div class="container">
   <!-- Header Row -->
   <div class="header">
